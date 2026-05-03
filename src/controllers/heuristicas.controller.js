@@ -90,6 +90,28 @@ export const atualizar = asyncHandler(async (req, res) => {
 });
 
 /**
+ * PATCH /heuristicas/:id
+ * Update heuristica
+ * @async
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @returns {Object} Updated heuristica
+ */
+export const atualizarParcial = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.validatedBody;
+  const userId = req.user?.id;
+
+  // Reutilizamos o método atualizar do service, pois ele já faz o merge (...updateData)
+  const heuristica = await heuristicasService.atualizar(id, updateData, userId);
+
+  res.status(200).json(
+    formatSuccess(heuristica, { message: 'Heurística atualizada parcialmente' })
+  );
+});
+
+
+/**
  * DELETE /heuristicas/:id
  * Delete heuristica
  * @async

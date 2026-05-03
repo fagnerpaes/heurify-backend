@@ -109,6 +109,46 @@ export const updateHeuristicaSchema = Joi.object({
 });
 
 /**
+ * Update heuristica validation schema (one field optional)
+ * @type {Joi.ObjectSchema}
+ */
+export const patchHeuristicaSchema = Joi.object({
+  title: Joi.string()
+    .min(3)
+    .max(200)
+    .optional(),
+  description: Joi.string()
+    .min(10)
+    .max(2000)
+    .optional(),
+  technique: Joi.string()
+    .min(3)
+    .max(100)
+    .optional(),
+  applicationScenario: Joi.string()
+    .min(10)
+    .max(1000)
+    .optional(),
+  examples: Joi.array()
+    .items(Joi.string().min(5).max(500))
+    .optional()
+    .max(20),
+  riskNotes: Joi.string()
+    .max(1000)
+    .optional(),
+  tags: Joi.array()
+    .items(Joi.string().min(2).max(50))
+    .optional()
+    .max(10),
+  status: Joi.string()
+    .valid('draft', 'reviewed', 'approved', 'archived')
+    .optional(),
+}).min(1).messages({
+  'object.min': 'Pelo menos um campo deve ser fornecido para atualizar',
+});
+
+
+/**
  * Search/Filter query validation schema
  * @type {Joi.ObjectSchema}
  */

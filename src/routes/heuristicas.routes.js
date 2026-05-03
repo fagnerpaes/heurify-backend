@@ -7,6 +7,7 @@ import {
   deletar,
   buscar,
   obterEstatisticas,
+  atualizarParcial,
 } from '../controllers/heuristicas.controller.js';
 import { createValidator, createQueryValidator } from '../middleware/validation.middleware.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
@@ -15,6 +16,7 @@ import {
   updateHeuristicaSchema,
   searchHeuristicaSchema,
 } from '../validators/heuristicas.validator.js';
+import { patchHeuristicaSchema } from '../validators/heuristicas.validator.js';
 
 const router = Router();
 
@@ -269,6 +271,61 @@ router.put(
   '/:id',
   createValidator(updateHeuristicaSchema),
   atualizar
+);
+
+/**
+ * PATCH /heuristicas/:id
+ * @swagger
+ * /heuristicas/{id}:
+ *   patch:
+ *     summary: Update heuristica partially
+ *     tags: [Heuristicas]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Heuristica ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               technique:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [draft, published, archived]
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *           example:
+ *             title: "Novo Título Parcial"
+ *     responses:
+ *       200:
+ *         description: Heuristica updated successfully
+ *       400:
+ *         description: Invalid data or empty body
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Heuristica not found
+ */
+router.patch(
+  '/:id', 
+  authMiddleware, 
+  createValidator(patchHeuristicaSchema), 
+  atualizarParcial
 );
 
 /**

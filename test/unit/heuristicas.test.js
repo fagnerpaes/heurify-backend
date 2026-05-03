@@ -342,4 +342,47 @@ describe('Heuristicas Controller', () => {
       expect(res.body.success).to.equal(false);
     });
   });
+
+  describe('PATCH /heuristicas/:id', () => {
+    it('should update only the title of a heuristica', async () => {
+        const res = await request(app)
+        .patch(`/heuristicas/${testHeuristicaId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ title: 'New Title via PATCH' })
+        .expect(200);
+
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.title).to.equal('New Title via PATCH');
+        // Verifica se a descrição original foi mantida
+        expect(res.body.data.description).to.exist; 
+    });
+
+    it('should increment version on patch', async () => {
+        const res = await request(app)
+        .patch(`/heuristicas/${testHeuristicaId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ technique: 'New Technique' });
+
+        expect(res.body.data.versao).to.be.greaterThan(1);
+    });
+
+    it('should reject patch with empty body', async () => {
+        await request(app)
+        .patch(`/heuristicas/${testHeuristicaId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({})
+        .expect(400);
+    });
+
+    it('should return 404 for non-existent id', async () => {
+        await request(app)
+        .patch('/heuristicas/non-existent-id')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ title: 'Valid Title' })
+        .expect(404);
+    });
+ });
+
 });
+
+
