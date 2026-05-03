@@ -48,7 +48,7 @@ class InMemoryStore {
         (h) =>
           h.title.toLowerCase().includes(term) ||
           h.description.toLowerCase().includes(term) ||
-          h.tags.some((tag) => tag.toLowerCase().includes(term)),
+          h.tags &&h.tags.some((tag) => tag.toLowerCase().includes(term)),
       );
     }
 
@@ -97,6 +97,18 @@ class InMemoryStore {
       items = items.filter((c) => c.heuristicaId === heuristicaId);
     }
     return items;
+  }
+
+  deletarCharter(id) {
+    return this.chartersGerados.delete(id);
+  }
+
+  atualizarCharter(id, updates) {
+    const charter = this.chartersGerados.get(id);
+    if (!charter) return null;
+    const atualizado = { ...charter, ...updates, id: charter.id };
+    this.chartersGerados.set(id, atualizado);
+    return atualizado;
   }
 
   // Sessões SBTM

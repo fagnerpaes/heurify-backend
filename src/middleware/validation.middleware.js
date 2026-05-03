@@ -22,6 +22,7 @@ export const createValidator = (schema) => {
       );
     }
 
+    req.body = value; // <-- ADICIONE ESTA LINHA: atualiza o body com valores convertidos/limpos
     req.validatedBody = value;
     next();
   };
@@ -46,6 +47,7 @@ export const createQueryValidator = (schema) => {
       );
     }
 
+    req.query = value; // <-- ADICIONE ESTA LINHA: transforma "?limit=10" (string) em 10 (number)
     req.validatedQuery = value;
     next();
   };

@@ -34,3 +34,10 @@ yarn-error.log*
 # Runtime
 .cache/
 tmp/
+
+# docs
+docs/
+
+# Examples
+examples/
+

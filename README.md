@@ -198,31 +198,144 @@ npm run format
 npm run format:check
 ```
 
-### Testes
+### 🧪 Testes - Estratégia VADER
 
-#### Executar testes unitários
+#### 📚 Documentação de Testes
 
+Este projeto implementa a heurística **VADER** (Valid, Anomalous, Data, Error, Request) para cobertura sistemática de testes.
+
+- **[QA_TEST_STRATEGY.md](./docs/QA_TEST_STRATEGY.md)** - Estratégia completa, mapeamento de endpoints, matriz VADER
+- **[VADER_COVERAGE_CHECKLIST.md](./docs/VADER_COVERAGE_CHECKLIST.md)** - Checklist de cobertura por endpoint
+- **[test/examples/VADER_test_example.js](./test/examples/VADER_test_example.js)** - Exemplos práticos de implementação
+
+#### 🔍 O que é VADER?
+
+```
+✅ V = Valid       → Cenários positivos com dados esperados
+🔀 A = Anomalous  → Dados inesperados, formatos estranhos, edge cases
+📊 D = Data       → Validação de limites, tipos, campos obrigatórios
+⚠️  E = Error      → Validações falhando, regras violadas, server errors
+📞 R = Request    → Métodos HTTP, headers, autenticação
+```
+
+#### 🚀 Executar Testes
+
+##### Toda suite de testes
 ```bash
 npm test
 ```
 
-#### Executar testes em modo watch
+##### Testes específicos de um endpoint
+```bash
+# Testes de autenticação
+npm test -- test/unit/auth.test.js
 
+# Testes de heurísticas
+npm test -- test/unit/heuristicas.test.js
+
+# Testes de charter
+npm test -- test/unit/charter.test.js
+
+# Testes de SBTM
+npm test -- test/unit/sbtm.test.js
+```
+
+##### Modo watch (desenvolvimento)
 ```bash
 npm run test:watch
 ```
 
-#### Gerar relatório de cobertura
-
+##### Testes com cobertura detalhada
 ```bash
 npm run test:coverage
 ```
 
-#### Executar testes de integração
-
+##### Testes de integração (full flow)
 ```bash
 npm run test:integration
 ```
+
+##### Apenas testes críticos (pre-commit)
+```bash
+npm run test:fast
+```
+
+#### 📊 Relatório de Cobertura
+
+Após executar testes com cobertura, visite:
+```
+./coverage/index.html  # Abrir no navegador
+```
+
+**Meta:** ≥85% coverage, 100% VADER para endpoints críticos (P0)
+
+#### ✅ Exemplo de Teste VADER
+
+```javascript
+describe('✅ Valid - Cenários Positivos', () => {
+  it('[V1] Deve criar heurística com dados válidos → 201', async () => {
+    const payload = {
+      title: 'Teste Exploratório',
+      description: 'Descrição com 10+ caracteres',
+      technique: 'Session-Based Testing'
+    };
+
+    const res = await request(app)
+      .post('/heuristicas')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(payload)
+      .expect(201);
+
+    expect(res.body.success).to.equal(true);
+    expect(res.body.data.id).to.exist;
+  });
+});
+
+describe('📊 Data - Validação de Limites', () => {
+  it('[D1] Deve rejeitar title < 3 caracteres → 400', async () => {
+    const res = await request(app)
+      .post('/heuristicas')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send({ title: 'ab', /* ... */ })
+      .expect(400);
+
+    expect(res.body.error.code).to.equal('VALIDATION_ERROR');
+  });
+});
+```
+
+#### 📈 Checklist de Cobertura por Endpoint
+
+| Endpoint | Criticidade | VADER V | VADER A | VADER D | VADER E | VADER R | Total |
+|----------|-------------|---------|---------|---------|---------|---------|-------|
+| POST /auth/login | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 9/9 |
+| POST /heuristicas | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 9/15 |
+| GET /heuristicas/{id} | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 6/9 |
+| GET /heuristicas | P1 | ✅ | ✅ | ✅ | ✅ | ✅ | 7/10 |
+| POST /charters | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 7/15 |
+
+Ver cobertura completa em [VADER_COVERAGE_CHECKLIST.md](./docs/VADER_COVERAGE_CHECKLIST.md)
+
+#### 🔧 Configuração de Testes
+
+Testes usam:
+- **Mocha** - Test runner
+- **Chai** - Assertion library
+- **Supertest** - HTTP client para testes
+- **In-memory store** - Dados de teste isolados
+
+Arquivo de setup: `test/setup.js`
+
+#### 📋 Troubleshooting de Testes
+
+**Problema:** Tests timeout  
+**Solução:** Aumentar timeout em `test/setup.js` → `this.timeout(5000)`
+
+**Problema:** Tests falhando com "store not initialized"  
+**Solução:** Certificar que `store` é resetado entre testes (ver `beforeEach`)
+
+**Problema:** Import errors em testes  
+**Solução:** Verificar paths relativos em `test/` (todos devem usar ES6 imports)
 
 ### Produção
 

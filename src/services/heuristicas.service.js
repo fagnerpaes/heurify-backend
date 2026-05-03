@@ -222,22 +222,25 @@ export class HeuristicasService {
    */
   async buscar(termo, filters = {}) {
     try {
-        const { limit = 20, skip = 0 } = filters;
+        // Garante que o termo existe e é string para evitar erro no .toLowerCase() do store
+        const searchTerm = termo || '';
+        const limit = parseInt(filters.limit) || 20;
+        const skip = parseInt(filters.skip) || 0;
 
-        // 1. Verifique se o seu store tem esse método ou se usa o listarHeuristicas
-        // Se o seu store só tem listarHeuristicas, use ele passando o termo no campo search
-        const items = store.listarHeuristicas({ search: termo, limit, skip });
+        const items = store.listarHeuristicas({ search: searchTerm, limit, skip }) || [];
 
         const result = {
-        data: items || [],
-        total: items ? items.length : 0,
-        searchTerm: termo
+        data: items,
+        total: items.length, // Agora é seguro pois items é no mínimo []
+        searchTerm: searchTerm
         };
 
-        logger.info(`Search for "${termo}" returned ${result.data.length} items`);
+        logger.info(`Search for "${searchTerm}" returned ${result.data.length} items`);
         return result;
     } catch (error) {
         logger.error(`Error searching heuristicas: ${error.message}`);
+        // Se for erro de validação ou do AppError, relance. Senão, 500.
+        if (error instanceof AppError) throw error;
         throw new AppError('Erro ao buscar heurísticas', 500);
     }
   }

@@ -13,6 +13,8 @@ import { errorHandler } from './utils/error-handler.js';
 import healthRoutes from './routes/health.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import heuristicasRoutes from './routes/heuristicas.routes.js';
+import charterRoutes from './routes/charter.routes.js';
+import sbtmRoutes from './routes/sbtm.routes.js';
 
 export const createApp = () => {
   const app = express();
@@ -38,6 +40,12 @@ export const createApp = () => {
 
   // Heuristicas routes (all protected)
   app.use('/heuristicas', heuristicasRoutes);
+
+  // Charter routes (all protected)
+  app.use('/charters', charterRoutes);
+
+  // SBTM routes (all protected)
+  app.use('/sessoes-sbtm', sbtmRoutes);
 
   // Catch-all for undefined routes
   app.use((req, res) => {
