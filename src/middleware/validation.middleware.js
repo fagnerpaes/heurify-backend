@@ -1,4 +1,6 @@
 import Joi from 'joi';
+import { formatError } from '../utils/helpers.js'; // Importe o seu helper
+import { ERROR_CODES } from '../config/error-codes.js';
 
 export const createValidator = (schema) => {
   return (req, res, next) => {
@@ -14,14 +16,10 @@ export const createValidator = (schema) => {
         type: err.type,
       }));
 
-      return res.status(400).json({
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Validation failed',
-          details,
-          timestamp: new Date().toISOString(),
-        },
-      });
+      // Use o formatError para garantir que o 'success: false' seja incluído
+      return res.status(400).json(
+        formatError(ERROR_CODES.VALIDATION_ERROR, 'Validation failed', details)
+      );
     }
 
     req.validatedBody = value;
@@ -43,14 +41,9 @@ export const createQueryValidator = (schema) => {
         type: err.type,
       }));
 
-      return res.status(400).json({
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Validation failed',
-          details,
-          timestamp: new Date().toISOString(),
-        },
-      });
+      return res.status(400).json(
+        formatError(ERROR_CODES.VALIDATION_ERROR, 'Validation failed', details)
+      );
     }
 
     req.validatedQuery = value;

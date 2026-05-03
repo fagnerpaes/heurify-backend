@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { createValidator, createQueryValidator } from '../../src/middleware/validation.middleware.js';
+import { ERROR_CODES } from '../../src/config/error-codes.js';
 import Joi from 'joi';
 
 describe('Validation Middleware', () => {
@@ -55,7 +56,7 @@ describe('Validation Middleware', () => {
         json: (data) => {
           jsonData = data;
           expect(statusCode).to.equal(400);
-          expect(jsonData.error.code).to.equal('VALIDATION_ERROR');
+          expect(jsonData.error.code).to.equal(ERROR_CODES.VALIDATION_ERROR);
           expect(jsonData.error.details).to.be.an('array');
           done();
         },
@@ -90,7 +91,7 @@ describe('Validation Middleware', () => {
         json: (data) => {
           jsonData = data;
           expect(statusCode).to.equal(400);
-          expect(jsonData.error.code).to.equal('VALIDATION_ERROR');
+          expect(jsonData.error.code).to.equal(ERROR_CODES.VALIDATION_ERROR);
           done();
         },
       };

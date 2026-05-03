@@ -13,6 +13,13 @@ export class AppError extends Error {
 }
 
 export const errorHandler = (err, req, res, next) => {
+
+  // LOG ABSOLUTO: Isso TEM que aparecer se o middleware for chamado
+  console.log('--- MIDDLEWARE DE ERRO CHAMADO ---');
+  console.log('TIPO DO ERRO:', err.constructor.name);
+  console.log('CONTEÚDO:', err.message);
+  
+  
   logger.error({
     message: err.message,
     stack: err.stack,
@@ -28,12 +35,30 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   // Joi validation errors
+  /*old code:
   if (err.isJoi) {
     const statusCode = err.status === 'OBJECT_REQUIRED' ? HTTP_STATUS.BAD_REQUEST : HTTP_STATUS.UNPROCESSABLE_ENTITY;
     const message = err.details.map((d) => d.message).join('; ');
     return res.status(statusCode).json(
       formatError(ERROR_CODES.VALIDATION_ERROR, message),
     );
+  }
+
+  */
+  // Joi validation errors
+  if (err.isJoi) {
+    const statusCode = HTTP_STATUS.BAD_REQUEST; // Força 400 para o teste
+    const message = err.details.map((d) => d.message).join('; ');
+    
+    console.log('>>> PEGOU NO BLOCO JOI <<<'); // Log para confirmar
+
+    return res.status(statusCode).json({
+      success: false, // Escrito manualmente para não ter erro
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: message
+      }
+    });
   }
 
   // JWT errors
@@ -50,13 +75,30 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   // Default error
-  res.status(err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR).json(
+  /*return res.status(err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR).json(
+    formatError(
+      ERROR_CODES.INTERNAL_ERROR,
+      err.message || 'Internal server error',
+    ),
+  );*/
+  // >>> ACRESCENTE O LOG AQUI <<<
+  console.log('ERRO QUE CAIU NO DEFAULT:', {
+    name: err.name,
+    message: err.message,
+    isJoi: err.isJoi,
+    status: err.status,
+    statusCode: err.statusCode
+  }); 
+
+  // Default error
+  return res.status(err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR).json(
     formatError(
       ERROR_CODES.INTERNAL_ERROR,
       err.message || 'Internal server error',
     ),
   );
-};
+}; // Fim do errorHandler  
+
 
 export const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);

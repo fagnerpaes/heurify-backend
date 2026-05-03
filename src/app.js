@@ -11,6 +11,8 @@ import { errorHandler } from './utils/error-handler.js';
 
 // Routes
 import healthRoutes from './routes/health.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import heuristicasRoutes from './routes/heuristicas.routes.js';
 
 export const createApp = () => {
   const app = express();
@@ -28,8 +30,14 @@ export const createApp = () => {
     },
   }));
 
-  // Health check (non-protected)
+  // Public routes
   app.use(healthRoutes);
+
+  // Auth routes (public: login, register; protected: logout, me)
+  app.use('/auth', authRoutes);
+
+  // Heuristicas routes (all protected)
+  app.use('/heuristicas', heuristicasRoutes);
 
   // Catch-all for undefined routes
   app.use((req, res) => {

@@ -12,14 +12,18 @@ export const isValidEmail = (email) => {
 };
 
 export const formatError = (code, message, details = {}) => {
-  return {
+  const response = {
+    success: false,
     error: {
       code,
       message,
       details,
-      timestamp: formatDate(),
+      //timestamp: formatDate(),
+      timestamp: new Date().toISOString(), // Usei ISOString para garantir
     },
   };
+  console.log('DEBUG HELPER:', response); // Adicione este log aqui dentro!
+  return response;
 };
 
 export const formatSuccess = (data, meta = {}) => {
