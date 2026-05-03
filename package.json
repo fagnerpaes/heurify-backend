@@ -1,0 +1,55 @@
+{
+  "name": "heurify-backend",
+  "version": "0.1.0",
+  "description": "RESTful API for Heurify - Centralized test heuristics management platform",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "mocha 'test/unit/**/*.test.js' --exit",
+    "test:watch": "mocha 'test/unit/**/*.test.js' --watch",
+    "test:coverage": "nyc mocha 'test/unit/**/*.test.js' --exit",
+    "test:integration": "mocha 'test/integration/**/*.test.js' --exit",
+    "lint": "eslint src/ test/",
+    "lint:fix": "eslint src/ test/ --fix",
+    "format": "prettier --write src/ test/ docs/",
+    "format:check": "prettier --check src/ test/ docs/"
+  },
+  "keywords": [
+    "heuristics",
+    "testing",
+    "sbtm",
+    "charter",
+    "api"
+  ],
+  "author": "Heurify Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "joi": "^17.11.0",
+    "uuid": "^9.0.1",
+    "swagger-ui-express": "^5.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0",
+    "express-async-errors": "^3.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.10",
+    "sinon": "^17.0.1",
+    "supertest": "^6.3.3",
+    "nyc": "^15.1.0",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
