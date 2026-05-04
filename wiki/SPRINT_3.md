@@ -31,8 +31,8 @@ Implementar sistema completo de Charter de Teste e SBTM (Session-Based Test Mana
 | `src/controllers/sbtm.controller.js` | Controller | 140 | ✅ |
 | `src/routes/charter.routes.js` | Routes | 210 | ✅ |
 | `src/routes/sbtm.routes.js` | Routes | 260 | ✅ |
-| `test/unit/charter.test.js` | Tests | 280 | ✅ |
-| `test/unit/sbtm.test.js` | Tests | 380 | ✅ |
+| `test/api/charter.test.js` | Tests | 280 | ✅ |
+| `test/api/sbtm.test.js` | Tests | 380 | ✅ |S
 | (modified `src/app.js`) | Config | - | ✅ |
 
 **Total novo código:** ~2.190 linhas

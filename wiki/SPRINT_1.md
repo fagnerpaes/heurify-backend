@@ -1,6 +1,6 @@
 # 📋 SPRINT 1 - AUTENTICAÇÃO JWT
 
-**Data:** 3 de maio de 2026  
+**Data:** 1 de maio de 2026  
 **Status:** ✅ IMPLEMENTAÇÃO COMPLETA  
 **Issues:** #4 (JWT Auth) + #8 (RBAC Base)  
 **Horas Estimadas:** 9h  
@@ -28,7 +28,7 @@ Implementar autenticação JWT completa com endpoints de login/register, permiti
 | `src/services/auth.service.js` | Service | 160 | ✅ |
 | `src/controllers/auth.controller.js` | Controller | 90 | ✅ |
 | `src/routes/auth.routes.js` | Routes | 170 | ✅ |
-| `test/unit/auth.test.js` | Tests | 250 | ✅ |
+| `test/api/auth.test.js` | Tests | 250 | ✅ |
 | `RELATORIO_CORRECOES.md` | Documentation | 200 | ✅ |
 | (indirectly modified `src/app.js`) | Config | - | ✅ |
 

@@ -29,7 +29,7 @@ Implementar operações CRUD completas para heurísticas com suporte a:
 | `src/services/heuristicas.service.js` | Service | 230 | ✅ |
 | `src/controllers/heuristicas.controller.js` | Controller | 120 | ✅ |
 | `src/routes/heuristicas.routes.js` | Routes | 260 | ✅ |
-| `test/unit/heuristicas.test.js` | Tests | 350 | ✅ |
+| `test/api/heuristicas.test.js` | Tests | 350 | ✅ |
 | (modified `src/app.js`) | Config | - | ✅ |
 
 **Total novo código:** ~1.080 linhas
