@@ -198,123 +198,12 @@ npm run format
 npm run format:check
 ```
 
-### 🧪 Testes - Estratégia VADER
-
-#### 📚 Documentação de Testes
-
-Este projeto implementa a heurística **VADER** (Valid, Anomalous, Data, Error, Request) para cobertura sistemática de testes.
-
-- **[QA_TEST_STRATEGY.md](./docs/QA_TEST_STRATEGY.md)** - Estratégia completa, mapeamento de endpoints, matriz VADER
-- **[VADER_COVERAGE_CHECKLIST.md](./docs/VADER_COVERAGE_CHECKLIST.md)** - Checklist de cobertura por endpoint
-- **[test/examples/VADER_test_example.js](./test/examples/VADER_test_example.js)** - Exemplos práticos de implementação
-
-#### 🔍 O que é VADER?
-
-```
-✅ V = Valid       → Cenários positivos com dados esperados
-🔀 A = Anomalous  → Dados inesperados, formatos estranhos, edge cases
-📊 D = Data       → Validação de limites, tipos, campos obrigatórios
-⚠️  E = Error      → Validações falhando, regras violadas, server errors
-📞 R = Request    → Métodos HTTP, headers, autenticação
-```
-
 #### 🚀 Executar Testes
 
 ##### Toda suite de testes
 ```bash
 npm test
 ```
-
-##### Testes específicos de um endpoint
-```bash
-# Testes de autenticação
-npm test -- test/unit/auth.test.js
-
-# Testes de heurísticas
-npm test -- test/unit/heuristicas.test.js
-
-# Testes de charter
-npm test -- test/unit/charter.test.js
-
-# Testes de SBTM
-npm test -- test/unit/sbtm.test.js
-```
-
-##### Modo watch (desenvolvimento)
-```bash
-npm run test:watch
-```
-
-##### Testes com cobertura detalhada
-```bash
-npm run test:coverage
-```
-
-##### Testes de integração (full flow)
-```bash
-npm run test:integration
-```
-
-##### Apenas testes críticos (pre-commit)
-```bash
-npm run test:fast
-```
-
-#### 📊 Relatório de Cobertura
-
-Após executar testes com cobertura, visite:
-```
-./coverage/index.html  # Abrir no navegador
-```
-
-**Meta:** ≥85% coverage, 100% VADER para endpoints críticos (P0)
-
-#### ✅ Exemplo de Teste VADER
-
-```javascript
-describe('✅ Valid - Cenários Positivos', () => {
-  it('[V1] Deve criar heurística com dados válidos → 201', async () => {
-    const payload = {
-      title: 'Teste Exploratório',
-      description: 'Descrição com 10+ caracteres',
-      technique: 'Session-Based Testing'
-    };
-
-    const res = await request(app)
-      .post('/heuristicas')
-      .set('Authorization', `Bearer ${authToken}`)
-      .send(payload)
-      .expect(201);
-
-    expect(res.body.success).to.equal(true);
-    expect(res.body.data.id).to.exist;
-  });
-});
-
-describe('📊 Data - Validação de Limites', () => {
-  it('[D1] Deve rejeitar title < 3 caracteres → 400', async () => {
-    const res = await request(app)
-      .post('/heuristicas')
-      .set('Authorization', `Bearer ${authToken}`)
-      .send({ title: 'ab', /* ... */ })
-      .expect(400);
-
-    expect(res.body.error.code).to.equal('VALIDATION_ERROR');
-  });
-});
-```
-
-#### 📈 Checklist de Cobertura por Endpoint
-
-| Endpoint | Criticidade | VADER V | VADER A | VADER D | VADER E | VADER R | Total |
-|----------|-------------|---------|---------|---------|---------|---------|-------|
-| POST /auth/login | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 9/9 |
-| POST /heuristicas | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 9/15 |
-| GET /heuristicas/{id} | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 6/9 |
-| GET /heuristicas | P1 | ✅ | ✅ | ✅ | ✅ | ✅ | 7/10 |
-| POST /charters | P0 | ✅ | ✅ | ✅ | ✅ | ✅ | 7/15 |
-
-Ver cobertura completa em [VADER_COVERAGE_CHECKLIST.md](./docs/VADER_COVERAGE_CHECKLIST.md)
 
 #### 🔧 Configuração de Testes
 
@@ -323,33 +212,9 @@ Testes usam:
 - **Chai** - Assertion library
 - **Supertest** - HTTP client para testes
 - **In-memory store** - Dados de teste isolados
+- **seedData.js** - Dados de teste pré-definidos
 
 Arquivo de setup: `test/setup.js`
-
-#### 📋 Troubleshooting de Testes
-
-**Problema:** Tests timeout  
-**Solução:** Aumentar timeout em `test/setup.js` → `this.timeout(5000)`
-
-**Problema:** Tests falhando com "store not initialized"  
-**Solução:** Certificar que `store` é resetado entre testes (ver `beforeEach`)
-
-**Problema:** Import errors em testes  
-**Solução:** Verificar paths relativos em `test/` (todos devem usar ES6 imports)
-
-### Produção
-
-#### Iniciar servidor
-
-```bash
-npm start
-```
-
-#### Build (se aplicável)
-
-```bash
-npm run build
-```
 
 ---
 
@@ -537,60 +402,16 @@ npm run test:coverage
 
 ---
 
-## 👥 Contribuição
-
-Seguimos o padrão **GitFlow** para contribuições. Consulte a [Wiki de Fluxo de Trabalho](../../wiki/Fluxo-de-Trabalho) para detalhes.
-
-### Passos para Contribuir
-
-1. **Fork** o repositório
-2. Crie uma branch feature (`git checkout -b feature/AmazingFeature`)
-3. Faça commit de suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um **Pull Request**
-
-### Padrões de Código
-
-- Siga as regras do ESLint: `npm run lint`
-- Formate o código com Prettier: `npm run format`
-- Escreva testes para novas features
-- Mantenha coverage acima de 80%
-
----
 
 ## 📖 Documentação Adicional
 
-Consulte a [Wiki do Projeto](../../wiki) para:
-
-- 🏗️ [Arquitetura e Decisões Técnicas](../../wiki/Arquitetura)
-- 🎨 [Guia de Estilo e Clean Code](../../wiki/Guia-de-Estilo)
-- 🔄 [Fluxo de Trabalho e CI/CD](../../wiki/Fluxo-de-Trabalho)
-- 📊 [Matriz de Rastreabilidade](../../wiki/Rastreabilidade)
-- 🐛 [Troubleshooting](../../wiki/Troubleshooting)
-- 🔌 [Integração de APIs](../../wiki/Integrações)
-
----
-
-## 🤝 Autores e Contribuidores
-
-| Nome | Role | GitHub |
-|------|------|--------|
-| Heurify Team | Founder | [@heurify](https://github.com/heurify) |
-| Seu Nome | Contributor | [@your-username](https://github.com/your-username) |
-
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob a **MIT License** - veja o arquivo [LICENSE](LICENSE) para detalhes.
+Consulte a [Wiki do Projeto](https://github.com/fagnerpaes/heurify-backend/wiki)
 
 ---
 
 ## 🤔 Suporte
 
 - 📖 Abra uma [Issue](../../issues)
-- 💬 Veja [Discussões](../../discussions)
-- 📧 Contate-nos em: contact@heurify.dev
 
 ---
 
